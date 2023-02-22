@@ -1,35 +1,40 @@
 import {useEffect, useState} from "react";
 import "./app.css";
 import Navbar from "./components/Navbar";
-//import NewPost from "./components/NewPost";
 import NewPost2 from "./components/NewPost2";
 import {fireStore} from "./Firebase";
 
 function App() {
-  const [file, setFile] = useState();
-  const [image, setImage] = useState();
+  const [files, setFiles] = useState();
+  const [images, setImages] = useState();
 
   useEffect(() => {
-    const getImage = () => {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        setImage({
-          url: img.src,
-          width: img.width,
-          height: img.height,
-        });
-      };
+    const getImages = () => {
+      const imageArray = [];
+      for (const file of files) {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+          const image = {
+            url: img.src,
+            width: img.width,
+            height: img.height,
+          };
+          imageArray.push(image);
+          if (imageArray.length === files.length) {
+            setImages(imageArray);
+          }
+        };
+      }
     };
-
-    file && getImage();
-  }, [file]);
+    getImages();
+  }, [files]);
 
   return (
     <div>
       <Navbar />
-      {image ? (
-        <NewPost2 image={image} />
+      {images && images.length > 0 ? (
+        <NewPost2 images={images} />
       ) : (
         <div className="newPostCard">
           <div className="addPost">
@@ -44,10 +49,11 @@ function App() {
               </label>
               <div className="App">{fireStore._databaseId.projectId}</div>;
               <input
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => setFiles(e.target.files)}
                 id="file"
                 style={{display: "none"}}
                 type="file"
+                multiple
               />
             </div>
           </div>

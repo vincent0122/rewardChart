@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import "./app.css";
 import Navbar from "./components/Navbar";
 import NewPost2 from "./components/NewPost2";
-import {fireStore} from "./Firebase";
 
 function App() {
   const [files, setFiles] = useState();
@@ -11,7 +10,8 @@ function App() {
   useEffect(() => {
     const getImages = () => {
       const imageArray = [];
-      for (const file of files) {
+      const filesArray = [...files];
+      for (const file of filesArray) {
         const img = new Image();
         img.src = URL.createObjectURL(file);
         img.onload = () => {
@@ -21,13 +21,15 @@ function App() {
             height: img.height,
           };
           imageArray.push(image);
-          if (imageArray.length === files.length) {
+          if (imageArray.length === filesArray.length) {
             setImages(imageArray);
           }
         };
       }
     };
-    getImages();
+    if (files) {
+      getImages();
+    }
   }, [files]);
 
   return (
@@ -47,7 +49,6 @@ function App() {
                   alt=""
                 />
               </label>
-              <div className="App">{fireStore._databaseId.projectId}</div>;
               <input
                 onChange={(e) => setFiles(e.target.files)}
                 id="file"

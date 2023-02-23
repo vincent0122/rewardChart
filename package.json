@@ -9,6 +9,7 @@
     "face-api.js": "^0.22.2",
     "firebase": "^9.17.1",
     "firebase-tools": "^11.23.1",
+    "jspdf": "^2.5.1",
     "postcss": "^7.0.0",
     "postcss-safe-parser": "^6.0.0",
     "react": "^17.0.2",

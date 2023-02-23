@@ -1,10 +1,10 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import * as faceapi from "face-api.js";
-import {firestore} from "../Firebase";
+import {collection, addDoc} from "firebase/firestore";
+import {firestore} from "./Firebase";
 
 const NewPost2 = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
-  const canvasRef = useRef();
 
   useEffect(() => {
     const loadModels = async () => {
@@ -17,7 +17,8 @@ const NewPost2 = ({images}) => {
     };
 
     loadModels();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images]);
 
   const handleImages = async () => {
     const allFaceImages = [];
@@ -30,23 +31,42 @@ const NewPost2 = ({images}) => {
         new faceapi.SsdMobilenetv1Options()
       );
 
+      const targetSize = 150;
+
       const imageFaces = detections.map((d, i) => {
-        const canvas = canvasRef.current;
+        const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        canvas.width = d.box.width;
-        canvas.height = d.box.height;
+
+        const centerPoint = {
+          x: d.box.x + d.box.width / 2,
+          y: d.box.y + d.box.height / 2,
+        };
+
+        const cropBox = {
+          x: centerPoint.x - targetSize / 2,
+          y: centerPoint.y - targetSize / 2,
+          width: targetSize,
+          height: targetSize,
+        };
+
+        canvas.width = targetSize;
+        canvas.height = targetSize;
+
         ctx.drawImage(
           img,
-          d.box.x,
-          d.box.y,
-          d.box.width,
-          d.box.height,
+          cropBox.x,
+          cropBox.y,
+          cropBox.width,
+          cropBox.height,
           0,
           0,
-          d.box.width,
-          d.box.height
+          targetSize,
+          targetSize
         );
-        return canvas.toDataURL("image/jpeg");
+
+        const faceImage = document.createElement("img");
+        faceImage.src = canvas.toDataURL("image/jpeg");
+        return faceImage;
       });
 
       allFaceImages.push(...imageFaces);
@@ -55,27 +75,31 @@ const NewPost2 = ({images}) => {
     setFaceImages(allFaceImages);
 
     // Save to Firestore
-    const collectionRef = firestore().collection("faces");
-    allFaceImages.forEach((faceImage, i) => {
-      collectionRef
-        .add({
-          image: faceImage,
-          createdAt: firestore.FieldValue.serverTimestamp(),
-        })
-        .then(() => console.log("Face image added to Firestore"))
-        .catch((e) => console.log(e));
+
+    allFaceImages.forEach(async (faceImage) => {
+      try {
+        const docRef = await addDoc(collection(firestore, "faces"), {
+          image: faceImage.src,
+        });
+        console.log("Face image added to Firestore with ID: ", docRef.id);
+      } catch (e) {
+        console.log("Error adding document to Firestore: ", e);
+      }
     });
   };
 
   return (
     <div className="container">
-      <div className="left" style={{width: 300, height: 300}}>
-        <img crossOrigin="anonymous" src={images[0] && images[0].url} alt="" />
-        <canvas ref={canvasRef} />
-      </div>
-      <div className="right">
-        <h1>Share your post</h1>
-        <button className="rightButton">Send</button>
+      <div className="left" style={{display: "flex", flexWrap: "wrap"}}>
+        {faceImages.map((faceImage) => (
+          <img
+            key={faceImage.src}
+            crossOrigin="anonymous"
+            src={faceImage.src}
+            alt=""
+            style={{width: "150px", height: "150px", objectFit: "cover"}}
+          />
+        ))}
       </div>
     </div>
   );

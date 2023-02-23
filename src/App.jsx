@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import "./app.css";
 import Navbar from "./components/Navbar";
-import NewPost2 from "./components/NewPost2";
+import NewPost from "./components/NewPost";
 
 function App() {
   const [files, setFiles] = useState();
@@ -15,10 +15,28 @@ function App() {
         const img = new Image();
         img.src = URL.createObjectURL(file);
         img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > 1200 || height > 1200) {
+            // Resize image while maintaining aspect ratio
+            if (width > height) {
+              height = (height / width) * 1200;
+              width = 1200;
+            } else {
+              width = (width / height) * 1200;
+              height = 1200;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
           const image = {
-            url: img.src,
-            width: img.width,
-            height: img.height,
+            url: canvas.toDataURL("image/jpeg"),
+            width,
+            height,
           };
           imageArray.push(image);
           if (imageArray.length === filesArray.length) {
@@ -36,7 +54,7 @@ function App() {
     <div>
       <Navbar />
       {images && images.length > 0 ? (
-        <NewPost2 images={images} />
+        <NewPost images={images} />
       ) : (
         <div className="newPostCard">
           <div className="addPost">

@@ -1,64 +1,56 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import * as faceapi from "face-api.js";
+import {collection, addDoc} from "firebase/firestore";
+import {firestore} from "./Firebase";
+import {jsPDF} from "jspdf";
+import handleImages from "./handleImages";
 
-const NewPost = ({image}) => {
-  const {url, width, height} = image;
-  const [faces, setFaces] = useState([]);
-
-  const imgRef = useRef();
-  const canvasRef = useRef();
+const NewPost2 = ({images}) => {
+  const [faceImages, setFaceImages] = useState([]);
 
   useEffect(() => {
-    const loadModels = () => {
-      Promise.all([
+    const loadModels = async () => {
+      await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
         faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
         faceapi.nets.faceExpressionNet.loadFromUri("/models"),
-      ])
-        .then(handleImage)
-        .catch((e) => console.log(e));
+      ]);
+      const allFaceImages = await handleImages(images);
+      setFaceImages(allFaceImages);
     };
 
-    imgRef.current && loadModels();
-  }, []);
+    loadModels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images]);
 
-  const handleImage = async () => {
-    const detections = await faceapi.detectAllFaces(
-      imgRef.current,
-      new faceapi.SsdMobilenetv1Options()
-    );
-    setFaces(detections.map((d) => Object.values(d.box)));
-  };
+  // Save to Firestore
 
-  const enter = () => {
-    const ctx = canvasRef.current.getContext("2d");
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "yellow";
-    faces.map((face) => ctx.strokeRect(...face));
-  };
+  // allFaceImages.forEach(async (faceImage) => {
+  //   try {
+  //     const docRef = await addDoc(collection(firestore, "faces"), {
+  //       image: faceImage.src,
+  //     });
+  //     console.log("Face image added to Firestore with ID: ", docRef.id);
+  //   } catch (e) {
+  //     console.log("Error adding document to Firestore: ", e);
+  //   }
+  // });
 
   return (
     <div className="container">
-      <div className="left" style={{width, height}}>
-        <img ref={imgRef} crossOrigin="anonymous" src={url} alt="" />
-        <canvas
-          onMouseEnter={enter}
-          ref={canvasRef}
-          width={width}
-          height={height}
-        />
-      </div>
-      <div className="right">
-        <h1>Share your post</h1>
-        <input
-          type="text"
-          placeholder="What's on your mind?"
-          className="rightInput"
-        />
-        <button className="rightButton">Send</button>
+      <div className="left" style={{display: "flex", flexWrap: "wrap"}}>
+        {faceImages.map((faceImage) => (
+          <img
+            key={faceImage.src}
+            crossOrigin="anonymous"
+            src={faceImage.src}
+            alt=""
+            style={{width: "150px", height: "150px", objectFit: "cover"}}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
-export default NewPost;
+export default NewPost2;

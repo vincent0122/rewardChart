@@ -4,7 +4,7 @@ import {firestore} from "./Firebase";
 
 const handleImages = async (images) => {
   const allFaceImages = [];
-  const targetSize = 150;
+  const targetSize = 160;
   const imagesPerRow = 8;
   const rowsPerPage = 6;
   const pageSize = {
@@ -20,6 +20,8 @@ const handleImages = async (images) => {
   canvas.height = pageSize.height;
 
   const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   while (faceCounter < 50) {
     for (let i = 0; i < images.length; i++) {
@@ -51,10 +53,30 @@ const handleImages = async (images) => {
         // Calculate the position of the current image within the canvas
         const row = Math.floor(faceCounter / imagesPerRow);
         const col = faceCounter % imagesPerRow;
-        const x = col * targetSize;
-        const y = row * targetSize;
+        const margin = 10;
+        const x =
+          (canvas.width -
+            (imagesPerRow * targetSize + (imagesPerRow - 1) * margin)) /
+            2 +
+          col * (targetSize + margin);
+        const y =
+          (canvas.height -
+            (rowsPerPage * targetSize + (rowsPerPage - 1) * margin)) /
+            2 +
+          row * (targetSize + margin);
 
         // Draw the current image onto the canvas
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(
+          x + targetSize / 2,
+          y + targetSize / 2,
+          targetSize / 2,
+          0,
+          Math.PI * 2
+        );
+        ctx.closePath();
+        ctx.clip();
         ctx.drawImage(
           img,
           cropBox.x,
@@ -66,6 +88,8 @@ const handleImages = async (images) => {
           targetSize,
           targetSize
         );
+
+        ctx.restore();
 
         faceCounter++;
       }
@@ -83,18 +107,15 @@ const handleImages = async (images) => {
   const img = document.createElement("img");
   img.src = dataURL;
 
-  // Append the image element to the body of the document
-  document.body.appendChild(img);
-
-  try {
-    // Add the data URL to Firestore
-    const docRef = await addDoc(collection(firestore, "faces"), {
-      image: dataURL,
-    });
-    console.log("Face image added to Firestore with ID: ", docRef.id);
-  } catch (e) {
-    console.log("Error adding document to Firestore: ", e);
-  }
+  // try {
+  //   // Add the data URL to Firestore
+  //   const docRef = await addDoc(collection(firestore, "faces"), {
+  //     image: dataURL,
+  //   });
+  //   console.log("Face image added to Firestore with ID: ", docRef.id);
+  // } catch (e) {
+  //   console.log("Error adding document to Firestore: ", e);
+  // }
 
   // Return the canvas with the face images
   return canvas;

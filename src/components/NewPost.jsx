@@ -1,8 +1,9 @@
+//preview는 보여주기니까 서버에 별도 저장이 필요하다.
+
 import {useEffect, useState} from "react";
 import * as faceapi from "face-api.js";
-import {collection, addDoc} from "firebase/firestore";
-import {firestore} from "./Firebase";
 import {jsPDF} from "jspdf";
+import html2pdf from "html2pdf.js";
 import handleImages from "./handleImages";
 
 const NewPost = ({images}) => {
@@ -25,14 +26,29 @@ const NewPost = ({images}) => {
   }, [images]);
 
   const handleSave = () => {
-    const doc = document.getElementById("preview");
-    const pdf = new jsPDF("landscape", "mm", "a4");
+    // Get the preview element
+    const preview = document.getElementById("preview");
 
-    pdf.html(doc, 10, 10, {
-      width: 190,
-    });
+    // Create a new element with the desired dimensions
+    const newPreview = document.createElement("div");
+    newPreview.style.width = "210mm";
+    newPreview.style.height = "297mm";
 
-    pdf.save(`${name}'s Reward Chart.pdf`);
+    // Copy the content of the preview element into the new element
+    const clone = preview.cloneNode(true);
+    newPreview.appendChild(clone);
+
+    // Set the options for the PDF conversion
+    const options = {
+      margin: 0,
+      filename: `${name}.pdf`,
+      image: {type: "jpeg", quality: 1},
+      html2canvas: {scale: 2},
+      jsPDF: {unit: "mm", format: "a4", orientation: "portrait"},
+    };
+
+    // Convert the preview element to PDF and download the file
+    html2pdf().set(options).from(newPreview).save();
   };
 
   const previewWidth = "70vw";
@@ -51,13 +67,23 @@ const NewPost = ({images}) => {
       >
         <div
           style={{
-            fontSize: "20px",
-            fontWeight: "bold",
-            color: "blue",
-            margin: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "5vh",
+            width: "100%",
           }}
         >
-          {`${name}'s Reward Chart`}
+          <div
+            style={{
+              fontSize: "20px",
+              fontWeight: "bold",
+              color: "blue",
+              margin: "10px",
+            }}
+          >
+            {`${name}`}
+          </div>
         </div>
         <div
           style={{

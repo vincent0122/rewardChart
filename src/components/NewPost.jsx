@@ -29,49 +29,44 @@ const NewPost = ({images}) => {
     // Get the preview element
     const preview = document.getElementById("preview");
 
-    // Create a new element with the desired dimensions
-    const newPreview = document.createElement("div");
-    newPreview.style.width = "210mm";
-    newPreview.style.height = "297mm";
-
-    // Copy the content of the preview element into the new element
-    const clone = preview.cloneNode(true);
-    newPreview.appendChild(clone);
-
     // Set the options for the PDF conversion
     const options = {
-      margin: 0,
-      filename: `${name}.pdf`,
-      image: {type: "jpeg", quality: 1},
-      html2canvas: {scale: 2},
-      jsPDF: {unit: "mm", format: "a4", orientation: "portrait"},
+      filename: "my-document.pdf",
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait",
+      },
     };
 
     // Convert the preview element to PDF and download the file
-    html2pdf().set(options).from(newPreview).save();
+    html2pdf().set(options).from(preview).save();
   };
 
-  const previewWidth = "70vw";
-  const faceImageSize = `calc(${previewWidth} / 8 - 10px)`;
+  const previewWidth = "205mm";
+  const faceImageSize = `calc(${previewWidth} / 10 - 10px)`;
 
   return (
-    <div style={{display: "flex", justifyContent: "space-between"}}>
+    <div style={{display: "flex"}}>
       <div
         id="preview"
         style={{
           width: previewWidth,
-          height: "calc(70vw * 1.414)",
+          height: "280mm",
+          zoom: "100%",
           border: "1px solid black",
-          marginTop: "5px",
+          margin: "10px 0px 0px 10px",
+          flex: "none",
         }}
       >
         <div
           style={{
             display: "flex",
+            height: "30vh",
+            width: "100%",
             justifyContent: "center",
             alignItems: "center",
-            height: "5vh",
-            width: "100%",
+            alignContent: "center",
           }}
         >
           <div
@@ -125,6 +120,7 @@ const NewPost = ({images}) => {
           flexDirection: "column",
           justifyContent: "flex-start",
           marginLeft: "5px",
+          marginTop: "10px",
         }}
       >
         <div
@@ -132,7 +128,6 @@ const NewPost = ({images}) => {
             display: "flex",
             alignItems: "center",
             width: "30vw",
-            marginTop: "5px",
           }}
         >
           <input

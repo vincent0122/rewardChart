@@ -2,7 +2,6 @@
 
 import {useEffect, useState} from "react";
 import * as faceapi from "face-api.js";
-import {jsPDF} from "jspdf";
 import html2pdf from "html2pdf.js";
 import handleImages from "./handleImages";
 
@@ -31,7 +30,7 @@ const NewPost = ({images}) => {
 
     // Set the options for the PDF conversion
     const options = {
-      filename: "my-document.pdf",
+      filename: `${name}.pdf`,
       jsPDF: {
         unit: "mm",
         format: "a4",

@@ -8,13 +8,14 @@ import handleImages from "./handleImages";
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
   const [name, setName] = useState("");
+  const [hoveredIndex, setHoveredIndex] = useState(-1);
 
   useEffect(() => {
     const loadModels = async () => {
       await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
-        faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-        faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+        // faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+        // faceapi.nets.faceExpressionNet.loadFromUri("/models"),
       ]);
       const allFaceImages = await handleImages(images);
       setFaceImages(allFaceImages);
@@ -23,6 +24,12 @@ const NewPost = ({images}) => {
     loadModels();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images]);
+
+  const handleDelete = (index) => {
+    const newFaceImages = [...faceImages];
+    newFaceImages.splice(index, 1);
+    setFaceImages(newFaceImages);
+  };
 
   const handleSave = () => {
     // Get the preview element
@@ -97,18 +104,42 @@ const NewPost = ({images}) => {
                 borderRadius: "50%",
                 overflow: "hidden",
                 margin: "3px 2px",
+                position: "relative",
               }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(-1)}
             >
-              <img
-                crossOrigin="anonymous"
-                src={faceImage.src}
-                alt=""
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+              {hoveredIndex === index ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "50%" - faceImage / 2,
+                    top: "50%" - faceImage / 2,
+                  }}
+                >
+                  <img
+                    src="Icons/trash.png"
+                    alt="Delete"
+                    style={{
+                      width: faceImageSize,
+                      height: faceImageSize,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleDelete(index)}
+                  />
+                </div>
+              ) : (
+                <img
+                  crossOrigin="anonymous"
+                  src={faceImage.src}
+                  alt=""
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -136,7 +167,10 @@ const NewPost = ({images}) => {
             style={{marginRight: "10px", width: "18vw", height: "5vh"}}
           />
           <button onClick={handleSave} style={{width: "7vw", height: "5vh"}}>
-            Save
+            Save page
+          </button>
+          <button onClick={handleSave} style={{width: "7vw", height: "5vh"}}>
+            Save icons
           </button>
         </div>
       </div>

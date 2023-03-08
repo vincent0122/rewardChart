@@ -70,18 +70,35 @@ const handleImages = async (images) => {
     }
   }
 
-  allFaceImages.forEach(async (faceImage) => {
-    try {
-      const docRef = await addDoc(collection(firestore, "faces"), {
-        image: faceImage.src,
-      });
-      console.log("Face image added to Firestore with ID: ", docRef.id);
-    } catch (e) {
-      console.log("Error adding document to Firestore: ", e);
-    }
-  });
+  // allFaceImages.forEach(async (faceImage) => {
+  //   try {
+  //     const docRef = await addDoc(collection(firestore, "faces"), {
+  //       image: faceImage.src,
+  //     });
+  //     console.log("Face image added to Firestore with ID: ", docRef.id);
+  //   } catch (e) {
+  //     console.log("Error adding document to Firestore: ", e);
+  //   }
+  // });
 
   return allFaceImages;
 };
 
 export default handleImages;
+
+onMouseEnter={(e) => {
+  const icon = document.createElement("img");
+  icon.src = "Icons/trash.png";
+  icon.style.position = "absolute";
+  icon.style.right = "0px";
+  icon.style.top = "0px";
+  icon.style.width = "25px";
+  icon.style.height = "25px";
+  icon.style.zIndex = "1";
+  e.currentTarget.appendChild(icon);
+}}
+onMouseLeave={(e) => {
+  const icon = e.currentTarget.lastChild;
+  e.currentTarget.removeChild(icon);
+}}
+onClick={() => handleDelete(index)}

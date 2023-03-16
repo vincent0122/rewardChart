@@ -8,6 +8,20 @@ function App() {
   const [images, setImages] = useState();
 
   useEffect(() => {
+    const lockScreenOrientation = async () => {
+      if (window.screen.orientation) {
+        try {
+          await window.screen.orientation.lock("portrait");
+        } catch (error) {
+          console.error("Screen orientation lock not supported:", error);
+        }
+      }
+    };
+
+    lockScreenOrientation();
+  }, []);
+
+  useEffect(() => {
     const getImages = () => {
       const imageArray = [];
       const filesArray = [...files];

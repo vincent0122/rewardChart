@@ -1,14 +1,44 @@
 //preview는 보여주기니까 서버에 별도 저장이 필요하다.
 
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import * as faceapi from "face-api.js";
 import html2pdf from "html2pdf.js";
 import handleImages from "./handleImages";
+import FaceImage from "./FaceImage";
 
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
+  const [selectionMode, setSelectionMode] = useState(false);
   const [name, setName] = useState("");
   const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const fileInputRef = useRef(null);
+
+  const handleSelectionClick = () => {
+    setSelectionMode(!selectionMode);
+  };
+
+  const handleAddPicture = () => {
+    // Trigger click event on the hidden file input
+    fileInputRef.current.click();
+  };
+
+  const onFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    // Convert the file to a data URL
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const url = reader.result;
+
+      // Process the new image and add detected faces to the existing face images
+      const newFaceImages = await handleImages([{url}]);
+      setFaceImages([...faceImages, ...newFaceImages]);
+    };
+  };
 
   useEffect(() => {
     const loadModels = async () => {
@@ -49,129 +79,148 @@ const NewPost = ({images}) => {
     html2pdf().set(options).from(preview).save();
   };
 
-  const previewWidth = "205mm";
-  const faceImageSize = `calc(${previewWidth} / 10 - 10px)`;
+  const faceImageSize = Math.min(window.innerWidth / 5, window.innerHeight / 5);
 
   return (
-    <div style={{display: "flex"}}>
+    <div>
+      <div style={{display: "flex", justifyContent: "flex-end", width: "100%"}}>
+        <button
+          onClick={handleSelectionClick}
+          style={{
+            width: "20%",
+            height: "5vh",
+            backgroundColor: selectionMode
+              ? "hsl(0, 30%, 35%)"
+              : "hsl(200, 45%, 55%)",
+            color: "white",
+            marginRight: "10px",
+            marginTop: "10px",
+          }}
+        >
+          {selectionMode ? "취소" : "선택"}
+        </button>
+        <div style={{display: "flex", justifyContent: "flex-end", flex: 1}}>
+          <button
+            onClick={handleSave}
+            style={{
+              width: "25vw",
+              height: "10vh",
+              background: "transparent",
+              border: "none",
+              marginRight: "10px",
+            }}
+          >
+            <img
+              src="/Icons/save2.svg"
+              alt="Save"
+              style={{width: "100%", height: "100%"}}
+            />
+          </button>
+          <button
+            onClick={() => handleDelete(hoveredIndex)}
+            disabled={hoveredIndex === -1}
+            style={{
+              width: "25vw",
+              height: "10vh",
+              background: "transparent",
+              border: "none",
+            }}
+          >
+            <img
+              src="/Icons/trash2.svg"
+              alt="Delete"
+              style={{width: "100%", height: "100%"}}
+            />
+          </button>
+        </div>
+      </div>
       <div
         id="preview"
         style={{
-          width: previewWidth,
-          height: "280mm",
-          zoom: "100%",
+          width: "100vw",
+          maxWidth: "220mm",
+          minHeight: "280mm",
           border: "1px solid black",
-          margin: "10px 0px 0px 10px",
-          flex: "none",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <div
           style={{
-            display: "flex",
-            height: "30vh",
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            alignContent: "center",
+            fontSize: "20px",
+            fontWeight: "bold",
+            color: "blue",
+            margin: "10px",
+          }}
+        >
+          {`${name}`}
+        </div>
+        <div
+          style={{
+            overflowY: "auto",
+            maxHeight: "calc(100vh - 100px)",
+            width: "90%",
+            paddingBottom: "10px",
           }}
         >
           <div
             style={{
-              fontSize: "20px",
-              fontWeight: "bold",
-              color: "blue",
-              margin: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "1.5%",
             }}
           >
-            {`${name}`}
+            {faceImages.map((faceImage, index) => (
+              <FaceImage
+                key={`${faceImage.src}-${index}`}
+                selectionMode={selectionMode}
+                faceImage={faceImage}
+                faceImageSize={faceImageSize}
+                index={index}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+                handleDelete={handleDelete}
+              />
+            ))}
           </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            flexWrap: "wrap",
-            margin: "10px",
-          }}
-        >
-          {faceImages.map((faceImage, index) => (
-            <div
-              key={`${faceImage.src}-${index}`}
-              style={{
-                width: faceImageSize,
-                height: faceImageSize,
-                borderRadius: "50%",
-                overflow: "hidden",
-                margin: "3px 2px",
-                position: "relative",
-              }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(-1)}
-            >
-              {hoveredIndex === index ? (
-                <div
-                  style={{
-                    position: "absolute",
-                    left: "50%" - faceImage / 2,
-                    top: "50%" - faceImage / 2,
-                  }}
-                >
-                  <img
-                    src="Icons/trash.png"
-                    alt="Delete"
-                    style={{
-                      width: faceImageSize,
-                      height: faceImageSize,
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleDelete(index)}
-                  />
-                </div>
-              ) : (
-                <img
-                  crossOrigin="anonymous"
-                  src={faceImage.src}
-                  alt=""
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-            </div>
-          ))}
         </div>
       </div>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-start",
-          marginLeft: "5px",
-          marginTop: "10px",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          backgroundColor: "white",
+          padding: "10px",
+          borderTop: "1px solid #ccc",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "30vw",
-          }}
-        >
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{marginRight: "10px", width: "18vw", height: "5vh"}}
-          />
-          <button onClick={handleSave} style={{width: "7vw", height: "5vh"}}>
+        <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+          <button onClick={handleSave} style={{width: "60%", height: "5vh"}}>
             Save page
           </button>
-          <button onClick={handleSave} style={{width: "7vw", height: "5vh"}}>
-            Save icons
+          <button
+            onClick={handleAddPicture}
+            style={{width: "7vw", height: "5vh", marginBottom: "10px"}}
+          >
+            Add Picture
           </button>
+
+          {/* Hidden file input element */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            style={{display: "none"}}
+          />
         </div>
       </div>
     </div>

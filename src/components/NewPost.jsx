@@ -2,19 +2,21 @@
 
 import {useEffect, useState, useRef} from "react";
 import * as faceapi from "face-api.js";
-import html2pdf from "html2pdf.js";
 import handleImages from "./handleImages";
 import FaceImage from "./FaceImage";
 
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
-  const [selectionMode, setSelectionMode] = useState(false);
-  const [name, setName] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const fileInputRef = useRef(null);
 
-  const handleSelectionClick = () => {
-    setSelectionMode(!selectionMode);
+  const handleImageSelected = (image, isSelected) => {
+    if (isSelected) {
+      setSelectedImages([...selectedImages, image]);
+    } else {
+      setSelectedImages(selectedImages.filter((img) => img.src !== image.src));
+    }
   };
 
   const handleAddPicture = () => {
@@ -61,44 +63,20 @@ const NewPost = ({images}) => {
     setFaceImages(newFaceImages);
   };
 
-  const handleSave = () => {
-    // Get the preview element
-    const preview = document.getElementById("preview");
-
-    // Set the options for the PDF conversion
-    const options = {
-      filename: `${name}.pdf`,
-      jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "portrait",
-      },
-    };
-
-    // Convert the preview element to PDF and download the file
-    html2pdf().set(options).from(preview).save();
+  const handleSave = async () => {
+    if (selectedImages.length === 0) {
+      alert("No images selected.");
+      return;
+    }
   };
+
+  // Convert the preview element to PDF and download the file
 
   const faceImageSize = Math.min(window.innerWidth / 5, window.innerHeight / 5);
 
   return (
     <div>
       <div style={{display: "flex", justifyContent: "flex-end", width: "100%"}}>
-        <button
-          onClick={handleSelectionClick}
-          style={{
-            width: "20%",
-            height: "5vh",
-            backgroundColor: selectionMode
-              ? "hsl(0, 30%, 35%)"
-              : "hsl(200, 45%, 55%)",
-            color: "white",
-            marginRight: "10px",
-            marginTop: "10px",
-          }}
-        >
-          {selectionMode ? "취소" : "선택"}
-        </button>
         <div style={{display: "flex", justifyContent: "flex-end", flex: 1}}>
           <button
             onClick={handleSave}
@@ -153,9 +131,7 @@ const NewPost = ({images}) => {
             color: "blue",
             margin: "10px",
           }}
-        >
-          {`${name}`}
-        </div>
+        ></div>
         <div
           style={{
             overflowY: "auto",
@@ -176,13 +152,13 @@ const NewPost = ({images}) => {
             {faceImages.map((faceImage, index) => (
               <FaceImage
                 key={`${faceImage.src}-${index}`}
-                selectionMode={selectionMode}
                 faceImage={faceImage}
                 faceImageSize={faceImageSize}
                 index={index}
                 hoveredIndex={hoveredIndex}
                 setHoveredIndex={setHoveredIndex}
                 handleDelete={handleDelete}
+                onImageSelected={handleImageSelected}
               />
             ))}
           </div>

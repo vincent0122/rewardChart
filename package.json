@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "face-api.js": "^0.22.2",
+    "file-saver": "^2.0.5",
     "firebase": "^9.17.1",
     "firebase-tools": "^11.23.1",
     "html2canvas": "^1.4.1",

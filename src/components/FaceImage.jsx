@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import React from "react";
 
 const FaceImage = ({
@@ -8,15 +8,10 @@ const FaceImage = ({
   hoveredIndex,
   setHoveredIndex,
   handleDelete,
-  selectionMode,
+  onImageSelected,
 }) => {
   const [selected, setSelected] = useState(false);
 
-  useEffect(() => {
-    if (!selectionMode) {
-      setSelected(false);
-    }
-  }, [selectionMode]);
   return (
     <div
       style={{
@@ -28,9 +23,8 @@ const FaceImage = ({
         position: "relative",
       }}
       onClick={() => {
-        if (selectionMode) {
-          setSelected(!selected);
-        }
+        setSelected(!selected);
+        onImageSelected(faceImage, !selected);
       }}
     >
       <img

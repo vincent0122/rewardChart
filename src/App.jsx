@@ -1,25 +1,11 @@
 import {useEffect, useState} from "react";
-import "./app.css";
+import "./css/app.css";
 import Navbar from "./components/Navbar";
 import NewPost from "./components/NewPost";
 
 function App() {
   const [files, setFiles] = useState();
   const [images, setImages] = useState();
-
-  useEffect(() => {
-    const lockScreenOrientation = async () => {
-      if (window.screen.orientation) {
-        try {
-          await window.screen.orientation.lock("portrait");
-        } catch (error) {
-          console.error("Screen orientation lock not supported:", error);
-        }
-      }
-    };
-
-    lockScreenOrientation();
-  }, []);
 
   useEffect(() => {
     const getImages = () => {
@@ -32,14 +18,14 @@ function App() {
           let width = img.width;
           let height = img.height;
 
-          if (width > 1200 || height > 1200) {
+          if (width > 1800 || height > 1800) {
             // Resize image while maintaining aspect ratio
             if (width > height) {
-              height = (height / width) * 1200;
-              width = 1200;
+              height = (height / width) * 1800;
+              width = 1800;
             } else {
-              width = (width / height) * 1200;
-              height = 1200;
+              width = (width / height) * 1800;
+              height = 1800;
             }
           }
           const canvas = document.createElement("canvas");

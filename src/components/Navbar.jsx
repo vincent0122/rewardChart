@@ -1,7 +1,7 @@
 const Navbar = () => {
   return (
     <div className="navbar">
-      <span>Vinc</span>
+      <span>FACE DETECTOR</span>
     </div>
   );
 };

@@ -4,18 +4,21 @@ import {useEffect, useState, useRef} from "react";
 import * as faceapi from "face-api.js";
 import handleImages from "./handleImages";
 import FaceImage from "./FaceImage";
+import styles from "../css/NewPost.module.css";
 
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState([]);
   const fileInputRef = useRef(null);
 
-  const handleImageSelected = (image, isSelected) => {
+  const handleImageSelected = (image, isSelected, index) => {
     if (isSelected) {
       setSelectedImages([...selectedImages, image]);
+      setSelectedIndex([...selectedIndex, index]);
     } else {
       setSelectedImages(selectedImages.filter((img) => img.src !== image.src));
+      setSelectedIndex(selectedIndex.filter((i) => i !== index));
     }
   };
 
@@ -29,17 +32,6 @@ const NewPost = ({images}) => {
     if (!file) {
       return;
     }
-
-    // Convert the file to a data URL
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async () => {
-      const url = reader.result;
-
-      // Process the new image and add detected faces to the existing face images
-      const newFaceImages = await handleImages([{url}]);
-      setFaceImages([...faceImages, ...newFaceImages]);
-    };
   };
 
   useEffect(() => {
@@ -57,17 +49,12 @@ const NewPost = ({images}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images]);
 
-  const handleDelete = (index) => {
-    const newFaceImages = [...faceImages];
-    newFaceImages.splice(index, 1);
+  const handleDeleteSelected = () => {
+    const newFaceImages = faceImages.filter(
+      (_, index) => !selectedIndex.includes(index)
+    );
     setFaceImages(newFaceImages);
-  };
-
-  const handleSave = async () => {
-    if (selectedImages.length === 0) {
-      alert("No images selected.");
-      return;
-    }
+    setSelectedIndex([]);
   };
 
   // Convert the preview element to PDF and download the file
@@ -75,129 +62,46 @@ const NewPost = ({images}) => {
   const faceImageSize = Math.min(window.innerWidth / 5, window.innerHeight / 5);
 
   return (
-    <div>
-      <div style={{display: "flex", justifyContent: "flex-end", width: "100%"}}>
-        <div style={{display: "flex", justifyContent: "flex-end", flex: 1}}>
-          <button
-            onClick={handleSave}
-            style={{
-              width: "25vw",
-              height: "10vh",
-              background: "transparent",
-              border: "none",
-              marginRight: "10px",
-            }}
-          >
-            <img
-              src="/Icons/save2.svg"
-              alt="Save"
-              style={{width: "100%", height: "100%"}}
+    <div className={styles.topBar}>
+      <div id="preview" className={styles.preview}>
+        <div></div>
+        <div className={styles.faceImagesWrapper}>
+          {faceImages.map((faceImage, index) => (
+            <FaceImage
+              key={`${faceImage.src}-${index}`}
+              faceImage={faceImage}
+              faceImageSize={faceImageSize}
+              index={index}
+              onImageSelected={handleImageSelected}
             />
-          </button>
-          <button
-            onClick={() => handleDelete(hoveredIndex)}
-            disabled={hoveredIndex === -1}
-            style={{
-              width: "25vw",
-              height: "10vh",
-              background: "transparent",
-              border: "none",
-            }}
-          >
-            <img
-              src="/Icons/trash2.svg"
-              alt="Delete"
-              style={{width: "100%", height: "100%"}}
-            />
-          </button>
+          ))}
         </div>
       </div>
-      <div
-        id="preview"
-        style={{
-          width: "100vw",
-          maxWidth: "220mm",
-          minHeight: "280mm",
-          border: "1px solid black",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "20px",
-            fontWeight: "bold",
-            color: "blue",
-            margin: "10px",
-          }}
-        ></div>
-        <div
-          style={{
-            overflowY: "auto",
-            maxHeight: "calc(100vh - 100px)",
-            width: "90%",
-            paddingBottom: "10px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "1.5%",
-            }}
-          >
-            {faceImages.map((faceImage, index) => (
-              <FaceImage
-                key={`${faceImage.src}-${index}`}
-                faceImage={faceImage}
-                faceImageSize={faceImageSize}
-                index={index}
-                hoveredIndex={hoveredIndex}
-                setHoveredIndex={setHoveredIndex}
-                handleDelete={handleDelete}
-                onImageSelected={handleImageSelected}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          backgroundColor: "white",
-          padding: "10px",
-          borderTop: "1px solid #ccc",
-        }}
-      >
-        <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
-          <button onClick={handleSave} style={{width: "60%", height: "5vh"}}>
-            Save page
-          </button>
-          <button
-            onClick={handleAddPicture}
-            style={{width: "7vw", height: "5vh", marginBottom: "10px"}}
-          >
-            Add Picture
-          </button>
-
-          {/* Hidden file input element */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={onFileChange}
-            style={{display: "none"}}
+      <div className={styles.bottomBar}>
+        <button onClick={handleAddPicture} className={styles.bottomButton}>
+          <img
+            src="/Icons/addImage.png"
+            alt="Delete"
+            style={{width: "100%", height: "100%"}}
           />
-        </div>
+        </button>
+        <button
+          onClick={() => handleDeleteSelected()}
+          className={styles.bottomButton}
+        >
+          <img
+            src="/Icons/trash2.svg"
+            alt="Delete"
+            style={{width: "100%", height: "100%"}}
+          />
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={onFileChange}
+          style={{display: "none"}}
+        />
       </div>
     </div>
   );

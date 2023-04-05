@@ -1,0 +1,48 @@
+.topBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  margin-top: 5px;
+}
+
+.bottomButton {
+  width: 25vw;
+  height: 10vh;
+  background: transparent;
+  border: none;
+}
+
+.preview {
+  width: 100vw;
+  max-width: 220mm;
+  min-height: 280mm;
+  border: 0px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.faceImagesWrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  width: 90%;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5%;
+}
+
+.bottomBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}

@@ -1,15 +1,7 @@
 import {useState} from "react";
 import React from "react";
 
-const FaceImage = ({
-  faceImage,
-  faceImageSize,
-  index,
-  hoveredIndex,
-  setHoveredIndex,
-  handleDelete,
-  onImageSelected,
-}) => {
+const FaceImage = ({faceImage, faceImageSize, index, onImageSelected}) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -24,7 +16,7 @@ const FaceImage = ({
       }}
       onClick={() => {
         setSelected(!selected);
-        onImageSelected(faceImage, !selected);
+        onImageSelected(faceImage, !selected, index);
       }}
     >
       <img

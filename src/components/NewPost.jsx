@@ -32,6 +32,16 @@ const NewPost = ({images}) => {
     if (!file) {
       return;
     }
+    // Convert the file to a data URL
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const url = reader.result;
+
+      // Process the new image and add detected faces to the existing face images
+      const newFaceImages = await handleImages([{url}]);
+      setFaceImages([...faceImages, ...newFaceImages]);
+    };
   };
 
   useEffect(() => {
@@ -78,10 +88,14 @@ const NewPost = ({images}) => {
         </div>
       </div>
       <div className={styles.bottomBar}>
-        <button onClick={handleAddPicture} className={styles.bottomButton}>
+        <button
+          //         onClick={handleAddPicture}
+          onTouchEnd={handleAddPicture}
+          className={styles.bottomButton}
+        >
           <img
-            src="/Icons/addImage.png"
-            alt="Delete"
+            src="/Icons/addImage.svg"
+            alt="Add"
             style={{width: "100%", height: "100%"}}
           />
         </button>

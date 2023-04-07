@@ -130,6 +130,13 @@ const NewPost = ({images}) => {
         </div>
       </div>
       <div className={styles.bottomBar}>
+        <button className={styles.bottomButton} style={{marginBottom: "30px"}}>
+          <img
+            src="/Icons/upscale.svg"
+            alt="Quality"
+            style={{width: "100%", height: "120%"}}
+          />
+        </button>
         <button
           onTouchEnd={handlePrintImage}
           onClick={handlePrintImage}

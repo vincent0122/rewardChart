@@ -38,6 +38,7 @@ function App() {
             width,
             height,
           };
+
           imageArray.push(image);
           if (imageArray.length === filesArray.length) {
             setImages(imageArray);
@@ -57,24 +58,22 @@ function App() {
         <NewPost images={images} />
       ) : (
         <div className="newPostCard">
-          <div className="addPost">
-            <div className="postForm">
-              <label htmlFor="file">
-                <img
-                  className="addImg"
-                  src={process.env.PUBLIC_URL + "/Icons/upload.svg"}
-                  style={{width: "100px", height: "100px"}}
-                  alt=""
-                />
-              </label>
-              <input
-                onChange={(e) => setFiles(e.target.files)}
-                id="file"
-                style={{display: "none"}}
-                type="file"
-                multiple
+          <div className="postForm">
+            <label htmlFor="file">
+              <img
+                className="addImg"
+                src={process.env.PUBLIC_URL + "/Icons/upload.svg"}
+                style={{width: "100px", height: "100px"}}
+                alt=""
               />
-            </div>
+            </label>
+            <input
+              onChange={(e) => setFiles(e.target.files)}
+              id="file"
+              style={{display: "none"}}
+              type="file"
+              multiple
+            />
           </div>
         </div>
       )}

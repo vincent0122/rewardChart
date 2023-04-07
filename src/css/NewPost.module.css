@@ -8,24 +8,23 @@
 
 .bottomButton {
   width: 25vw;
-  height: 10vh;
+  height: 8vh;
+  margin-bottom: 1vh;
   background: transparent;
   border: none;
 }
 
 .preview {
   width: 100vw;
-  max-width: 220mm;
-  min-height: 280mm;
   border: 0px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 90px;
 }
 
 .faceImagesWrapper {
   overflow-y: auto;
-  max-height: calc(100vh - 100px);
   width: 90%;
   padding-bottom: 10px;
   display: flex;
@@ -43,6 +42,7 @@
   bottom: 0;
   width: 100%;
   background-color: white;
+  height: 50px;
   padding: 10px;
   border-top: 1px solid #ccc;
 }

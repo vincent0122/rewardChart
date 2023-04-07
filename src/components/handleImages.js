@@ -1,10 +1,7 @@
 import * as faceapi from "@vladmandic/face-api";
-import Upscaler from "upscaler";
 
 const handleImages = async (images) => {
   const allFaceImages = [];
-
-  const upscaler = new Upscaler();
 
   for (let i = 0; i < images.length; i++) {
     const {url} = images[i];
@@ -79,13 +76,7 @@ const handleImages = async (images) => {
 
       const faceImage = document.createElement("img");
       faceImage.src = canvas.toDataURL("image/jpeg");
-
-      // Upscale the faceImage
-      const upscaledSrc = await upscaler.upscale(faceImage.src);
-      const upscaledFaceImage = document.createElement("img");
-      upscaledFaceImage.src = upscaledSrc;
-
-      allFaceImages.push(upscaledFaceImage);
+      allFaceImages.push(faceImage);
     }
   }
 

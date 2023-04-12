@@ -18,14 +18,14 @@ function App() {
           let width = img.width;
           let height = img.height;
 
-          if (width > 1800 || height > 1800) {
+          if (width > 2200 || height > 2200) {
             // Resize image while maintaining aspect ratio
             if (width > height) {
-              height = (height / width) * 1800;
-              width = 1800;
+              height = (height / width) * 2200;
+              width = 2200;
             } else {
-              width = (width / height) * 1800;
-              height = 1800;
+              width = (width / height) * 2200;
+              height = 2200;
             }
           }
           const canvas = document.createElement("canvas");

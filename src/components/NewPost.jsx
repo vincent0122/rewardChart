@@ -134,6 +134,17 @@ const NewPost = ({images}) => {
       </div>
       <div className={styles.bottomBar}>
         <button
+          onClick={() => window.location.reload()}
+          onTouchEnd={() => window.location.reload()}
+          className={styles.bottomButton}
+        >
+          <img
+            src="/Icons/home.svg"
+            alt="Home"
+            style={{width: "100%", height: "100%"}}
+          />
+        </button>
+        <button
           onTouchEnd={handlePrintImage}
           onClick={handlePrintImage}
           className={styles.bottomButton}
@@ -144,7 +155,7 @@ const NewPost = ({images}) => {
             style={{width: "100%", height: "100%"}}
           />
         </button>
-        <button onTouchEnd={handleAddPicture} className={styles.bottomButton}>
+        <button onClick={handleAddPicture} className={styles.bottomButton}>
           <img
             src="/Icons/addImage.svg"
             alt="Add"

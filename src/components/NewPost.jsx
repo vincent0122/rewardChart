@@ -6,7 +6,6 @@ import * as faceapi from "@vladmandic/face-api";
 import handleImages from "./handleImages";
 import FaceImage from "./FaceImage";
 import styles from "../css/NewPost.module.css";
-import handleUpscaleImage from "./handleUpscale";
 
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
@@ -67,12 +66,6 @@ const NewPost = ({images}) => {
     );
     setFaceImages(newFaceImages);
     setSelectedIndex([]);
-  };
-
-  const handleUpscale = () => {
-    handleUpscaleImage(selectedImages);
-    setSelectedIndex([]);
-    setSelectedImages([]);
   };
 
   const handlePrintImage = () => {
@@ -140,18 +133,6 @@ const NewPost = ({images}) => {
         </div>
       </div>
       <div className={styles.bottomBar}>
-        <button
-          onTouchEnd={handleUpscale}
-          onClick={handleUpscale}
-          className={styles.bottomButton}
-          style={{marginBottom: "30px"}}
-        >
-          <img
-            src="/Icons/upscale.svg"
-            alt="Quality"
-            style={{width: "100%", height: "120%"}}
-          />
-        </button>
         <button
           onTouchEnd={handlePrintImage}
           onClick={handlePrintImage}

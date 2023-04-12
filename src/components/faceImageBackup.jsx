@@ -3,6 +3,7 @@ import React from "react";
 const FaceImage = ({
   faceImage,
   faceImageSize,
+  selectedImages,
   selectedIndex,
   index,
   onImageSelected,
@@ -10,7 +11,10 @@ const FaceImage = ({
   const isSelected = selectedIndex.includes(index);
 
   const handleClick = () => {
-    onImageSelected(faceImage, !isSelected, index);
+    const newSelectedIndex = isSelected
+      ? selectedIndex.filter((i) => i !== index)
+      : [...selectedIndex, index];
+    onImageSelected(faceImage, newSelectedIndex);
   };
 
   return (

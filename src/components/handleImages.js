@@ -14,6 +14,7 @@ const handleImages = async (images) => {
     for (let j = 0; j < detections.length; j++) {
       const d = detections[j];
       const canvas = document.createElement("canvas");
+
       const ctx = canvas.getContext("2d");
 
       const centerPoint = {

@@ -6,6 +6,7 @@ import * as faceapi from "@vladmandic/face-api";
 import handleImages from "./handleImages";
 import FaceImage from "./FaceImage";
 import styles from "../css/NewPost.module.css";
+import handleUpscaleImage from "./handleUpscale";
 
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
@@ -68,6 +69,12 @@ const NewPost = ({images}) => {
     setSelectedIndex([]);
   };
 
+  const handleUpscale = () => {
+    handleUpscaleImage(selectedImages);
+    setSelectedIndex([]);
+    setSelectedImages([]);
+  };
+
   const handlePrintImage = () => {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
@@ -123,6 +130,9 @@ const NewPost = ({images}) => {
               key={`${faceImage.src}-${index}`}
               faceImage={faceImage}
               faceImageSize={faceImageSize}
+              selectedImages={selectedImages}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
               index={index}
               onImageSelected={handleImageSelected}
             />
@@ -130,7 +140,12 @@ const NewPost = ({images}) => {
         </div>
       </div>
       <div className={styles.bottomBar}>
-        <button className={styles.bottomButton} style={{marginBottom: "30px"}}>
+        <button
+          onTouchEnd={handleUpscale}
+          onClick={handleUpscale}
+          className={styles.bottomButton}
+          style={{marginBottom: "30px"}}
+        >
           <img
             src="/Icons/upscale.svg"
             alt="Quality"

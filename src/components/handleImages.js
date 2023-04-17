@@ -4,6 +4,10 @@ const handleImages = async (images) => {
   const allFaceImages = [];
 
   for (let i = 0; i < images.length; i++) {
+    if (allFaceImages.length >= 100) {
+      alert("Detected face number exceeded 100.");
+      break; // check if allFaceImages length is already 100 or more, if yes, break the loop
+    }
     const {url} = images[i];
     const img = await faceapi.fetchImage(url);
     const detections = await faceapi.detectAllFaces(
@@ -15,7 +19,7 @@ const handleImages = async (images) => {
       const d = detections[j];
 
       // add check to only process faces if bounding box is larger than 200px
-      if (d.box.width > 200 || d.box.height > 200) {
+      if (d.box.width > 10 || d.box.height > 10) {
         const canvas = document.createElement("canvas");
 
         const ctx = canvas.getContext("2d");
@@ -82,6 +86,11 @@ const handleImages = async (images) => {
         faceImage.src = canvas.toDataURL("image/jpeg");
 
         allFaceImages.push(faceImage);
+
+        if (allFaceImages.length >= 100) {
+          alert("Detected face number exceeded 100.");
+          break;
+        }
       }
     }
   }

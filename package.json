@@ -63,6 +63,9 @@
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
+    "ignorePatterns": [
+      "/node_modules/babel-preset-react-app/index.js"
+    ],
     "extends": [
       "react-app",
       "react-app/jest",

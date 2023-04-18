@@ -19,7 +19,7 @@ const handleImages = async (images) => {
       const d = detections[j];
 
       // add check to only process faces if bounding box is larger than 200px
-      if (d.box.width > 10 || d.box.height > 10) {
+      if (d.box.width > 200 || d.box.height > 200) {
         const canvas = document.createElement("canvas");
 
         const ctx = canvas.getContext("2d");

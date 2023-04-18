@@ -4,10 +4,13 @@
 import {useEffect, useState, useRef} from "react";
 import * as faceapi from "@vladmandic/face-api";
 import handleImages from "./handleImages";
+import handlePrintImage from "./handlePrint";
 import FaceImage from "./FaceImage";
 import styles from "../css/NewPost.module.css";
+import {useNavigate} from "react-router-dom";
 
 const NewPost = ({images}) => {
+  const navigate = useNavigate();
   const [faceImages, setFaceImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState([]);
@@ -68,48 +71,6 @@ const NewPost = ({images}) => {
     setSelectedIndex([]);
   };
 
-  const handlePrintImage = () => {
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-
-    const columns = 4;
-    const faceImageMargin = 10;
-    const fullWidth = faceImageSize * columns + faceImageMargin * (columns + 1);
-    const fullHeight =
-      faceImageSize * Math.ceil(faceImages.length / columns) +
-      faceImageMargin * (Math.ceil(faceImages.length / columns) + 1);
-
-    canvas.width = fullWidth;
-    canvas.height = fullHeight;
-
-    faceImages.forEach((faceImage, index) => {
-      const x =
-        (index % columns) * (faceImageSize + faceImageMargin) + faceImageMargin;
-      const y =
-        Math.floor(index / columns) * (faceImageSize + faceImageMargin) +
-        faceImageMargin;
-      const img = new Image();
-      img.src = faceImage.src;
-      img.onload = () => {
-        const originalWidth = img.naturalWidth;
-        const originalHeight = img.naturalHeight;
-        const aspectRatio = originalWidth / originalHeight;
-        const targetWidth = faceImageSize;
-        const targetHeight = faceImageSize / aspectRatio;
-
-        context.drawImage(img, x, y, targetWidth, targetHeight);
-      };
-    });
-
-    setTimeout(() => {
-      const dataURL = canvas.toDataURL("image/png");
-      const newWindow = window.open();
-      newWindow.document.write(
-        `<img src="${dataURL}" width="${fullWidth}" height="${fullHeight}"/>`
-      );
-    }, 1000);
-  };
-
   // Convert the preview element to PDF and download the file
 
   const faceImageSize = Math.min(window.innerWidth / 5, window.innerHeight / 5);
@@ -134,8 +95,8 @@ const NewPost = ({images}) => {
       </div>
       <div className={styles.bottomBar}>
         <button
-          onClick={() => window.location.reload()}
-          onTouchEnd={() => window.location.reload()}
+          onClick={() => navigate("/")}
+          onTouchEnd={() => navigate("/")}
           className={styles.bottomButton}
         >
           <img
@@ -144,7 +105,7 @@ const NewPost = ({images}) => {
             style={{width: "100%", height: "100%"}}
           />
         </button>
-        <button
+        {/* <button
           onTouchEnd={handlePrintImage}
           onClick={handlePrintImage}
           className={styles.bottomButton}
@@ -154,7 +115,7 @@ const NewPost = ({images}) => {
             alt="Printer"
             style={{width: "100%", height: "100%"}}
           />
-        </button>
+        </button> */}
         <button onClick={handleAddPicture} className={styles.bottomButton}>
           <img
             src="/Icons/addImage.svg"

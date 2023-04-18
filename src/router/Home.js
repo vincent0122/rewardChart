@@ -69,7 +69,7 @@ const Home = () => {
           <img
             className="addImg"
             src={process.env.PUBLIC_URL + "/Icons/upload.svg"}
-            style={{width: "100px", height: "100px"}}
+            style={{width: "25vh", height: "25vh"}}
             alt=""
           />
         </label>
@@ -80,6 +80,28 @@ const Home = () => {
           type="file"
           multiple
         />
+        <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <button onClick={() => navigate("/docs")}>
+              <img
+                src={process.env.PUBLIC_URL + "/Icons/docs.svg"}
+                alt="docs"
+                style={{
+                  width: "10vh",
+                  height: "10vh",
+                  marginLeft: "5vw",
+                }}
+              />
+            </button>
+            <span style={{marginTop: "5px", marginLeft: "5vw"}}>How To</span>
+          </div>
+        </div>
       </div>
     </div>
   );

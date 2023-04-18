@@ -105,17 +105,7 @@ const NewPost = ({images}) => {
             style={{width: "100%", height: "100%"}}
           />
         </button>
-        {/* <button
-          onTouchEnd={handlePrintImage}
-          onClick={handlePrintImage}
-          className={styles.bottomButton}
-        >
-          <img
-            src="/Icons/printer.svg"
-            alt="Printer"
-            style={{width: "100%", height: "100%"}}
-          />
-        </button> */}
+
         <button onClick={handleAddPicture} className={styles.bottomButton}>
           <img
             src="/Icons/addImage.svg"
@@ -130,6 +120,30 @@ const NewPost = ({images}) => {
           <img
             src="/Icons/trash2.svg"
             alt="Delete"
+            style={{width: "100%", height: "100%"}}
+          />
+        </button>
+        <button
+          onClick={() => navigate("/printer")}
+          onTouchEnd={() => navigate("/printer")}
+          className={styles.bottomButton}
+        >
+          <img
+            src="/Icons/star_yellow.svg"
+            alt="Star"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </button>
+        <button
+          onClick={() => navigate("/docs")}
+          className={styles.bottomButton}
+        >
+          <img
+            src="/Icons/docs.svg"
+            alt="docs"
             style={{width: "100%", height: "100%"}}
           />
         </button>

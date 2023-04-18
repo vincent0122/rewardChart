@@ -13,14 +13,14 @@ canvas {
 }
 
 .navbar {
-  height: 40px;
+  height: 8vh;
   background-color: #5d8cd3;
   display: flex;
   align-items: center;
   color: white;
   font-weight: bold;
-  padding: 0 100px 0 0;
-  font-size: 20px;
+  padding: 0 0px 0 0;
+  font-size: 4vh;
 }
 
 .navbar span {
@@ -64,7 +64,7 @@ button {
   padding: 5px 10px;
   border-radius: 5px;
   color: white;
-  background-color: teal;
+  background-color: transparent;
   cursor: pointer;
 }
 

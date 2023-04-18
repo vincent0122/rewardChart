@@ -5,6 +5,7 @@ import PrinterPage from "./components/PrinterPage";
 import Home from "./router/Home";
 import Main from "./router/Main";
 import Printer from "./router/Printer";
+import Docs from "./router/Docs";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/main" element={<Main />}></Route>
+          <Route path="/printer" element={<Printer />}></Route>
+          <Route path="/docs" element={<Docs />}></Route>
         </Routes>{" "}
       </div>
     </BrowserRouter>

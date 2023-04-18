@@ -1,9 +1,11 @@
 import React from "react";
 
-const Product = (props) => {
+const Printer = (props) => {
   return (
     <>
-      <h3>printe</h3>
+      <h3>printer</h3>
     </>
   );
 };
+
+export default Printer;

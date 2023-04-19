@@ -13,9 +13,10 @@ module.exports = {
   },
   plugins: ["react", "react-hooks"],
   rules: {
-    "no-console": "error",
+    "react/prop-types": 0,
+    "no-console": 0,
     "no-unused-vars": "error",
-    "react/react-in-jsx-scope": "error",
+    "react/react-in-jsx-scope": 0,
     "react/no-unsafe": "error",
     "react-hooks/rules-of-hooks": "error",
   },

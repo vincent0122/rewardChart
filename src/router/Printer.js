@@ -1,6 +1,6 @@
 import React from "react";
 
-const Printer = (props) => {
+const Printer = () => {
   return (
     <>
       <h3>printer</h3>

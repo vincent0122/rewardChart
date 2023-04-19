@@ -9,7 +9,6 @@ const Home = () => {
 
   const handleImagesLoaded = () => {
     if (images) {
-      console.log(images);
       navigate("/main", {state: {images}}); // navigate to "/main" route when images are loaded
     }
   };
@@ -80,28 +79,6 @@ const Home = () => {
           type="file"
           multiple
         />
-        <div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <button onClick={() => navigate("/docs")}>
-              <img
-                src={process.env.PUBLIC_URL + "/Icons/docs.svg"}
-                alt="docs"
-                style={{
-                  width: "10vh",
-                  height: "10vh",
-                  marginLeft: "5vw",
-                }}
-              />
-            </button>
-            <span style={{marginTop: "5px", marginLeft: "5vw"}}>How To</span>
-          </div>
-        </div>
       </div>
     </div>
   );

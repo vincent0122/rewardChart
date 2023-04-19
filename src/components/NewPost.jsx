@@ -2,15 +2,14 @@
 //별도 저장할 수 있는 이미지를 새창에서 띄우는게 안된다
 
 import {useEffect, useState, useRef} from "react";
+import React from "react";
 import * as faceapi from "@vladmandic/face-api";
 import handleImages from "./handleImages";
-import handlePrintImage from "./handlePrint";
 import FaceImage from "./FaceImage";
 import styles from "../css/NewPost.module.css";
-import {useNavigate} from "react-router-dom";
+import PropTypes from "prop-types";
 
 const NewPost = ({images}) => {
-  const navigate = useNavigate();
   const [faceImages, setFaceImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState([]);
@@ -94,18 +93,6 @@ const NewPost = ({images}) => {
         </div>
       </div>
       <div className={styles.bottomBar}>
-        <button
-          onClick={() => navigate("/")}
-          onTouchEnd={() => navigate("/")}
-          className={styles.bottomButton}
-        >
-          <img
-            src="/Icons/home.svg"
-            alt="Home"
-            style={{width: "100%", height: "100%"}}
-          />
-        </button>
-
         <button onClick={handleAddPicture} className={styles.bottomButton}>
           <img
             src="/Icons/addImage.svg"
@@ -137,16 +124,6 @@ const NewPost = ({images}) => {
             }}
           />
         </button>
-        <button
-          onClick={() => navigate("/docs")}
-          className={styles.bottomButton}
-        >
-          <img
-            src="/Icons/docs.svg"
-            alt="docs"
-            style={{width: "100%", height: "100%"}}
-          />
-        </button>
         <input
           ref={fileInputRef}
           type="file"
@@ -160,3 +137,7 @@ const NewPost = ({images}) => {
 };
 
 export default NewPost;
+
+NewPost.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

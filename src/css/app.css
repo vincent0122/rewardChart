@@ -12,21 +12,6 @@ canvas {
   position: absolute;
 }
 
-.navbar {
-  height: 8vh;
-  background-color: #5d8cd3;
-  display: flex;
-  align-items: center;
-  color: white;
-  font-weight: bold;
-  padding: 0 0px 0 0;
-  font-size: 4vh;
-}
-
-.navbar span {
-  margin-left: 30px;
-}
-
 .newPostCard {
   display: flex;
   align-items: center;
@@ -75,7 +60,6 @@ button {
 }
 
 .container {
-  height: calc(100vh - 50px);
   display: flex;
   align-items: center;
   justify-content: space-around;

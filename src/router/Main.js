@@ -5,7 +5,6 @@ import NewPost from "../components/NewPost";
 const Main = () => {
   const location = useLocation();
   const images = location.state?.images;
-  console.log(images);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

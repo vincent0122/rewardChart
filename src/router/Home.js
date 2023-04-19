@@ -63,7 +63,23 @@ const Home = () => {
 
   return (
     <div className="newPostCard">
-      <div className="postForm">
+      <div
+        className="postForm"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          marginTop: "5vh",
+        }}
+      >
+        <h3>Welcome to FaceDetector App</h3>
+        <p style={{marginBottom: "5vh", textAlign: "center", maxWidth: "80%"}}>
+          Upload an image to detect faces and create icons.
+        </p>
+        <p style={{marginBottom: "10vh", textAlign: "center", maxWidth: "80%"}}>
+          Click the upload icon to start.
+        </p>
         <label htmlFor="file">
           <img
             className="addImg"

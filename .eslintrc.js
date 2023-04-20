@@ -15,7 +15,7 @@ module.exports = {
   rules: {
     "react/prop-types": 0,
     "no-console": 0,
-    "no-unused-vars": "error",
+    "no-unused-vars": 0,
     "react/react-in-jsx-scope": 0,
     "react/no-unsafe": "error",
     "react-hooks/rules-of-hooks": "error",

@@ -2,6 +2,7 @@
 //별도 저장할 수 있는 이미지를 새창에서 띄우는게 안된다
 
 import {useEffect, useState, useRef} from "react";
+import {useNavigate} from "react-router-dom";
 import React from "react";
 import * as faceapi from "@vladmandic/face-api";
 import handleImages from "./handleImages";
@@ -11,9 +12,12 @@ import PropTypes from "prop-types";
 
 const NewPost = ({images}) => {
   const [faceImages, setFaceImages] = useState([]);
+  const [faceImagesSrc, setFaceImagesSrc] = useState([]);
+
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState([]);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleImageSelected = (image, isSelected, index) => {
     if (isSelected) {
@@ -24,6 +28,14 @@ const NewPost = ({images}) => {
       setSelectedIndex(selectedIndex.filter((i) => i !== index));
     }
   };
+
+  useEffect(() => {
+    // Extract the src attribute from each img element in faceImages
+    const srcArray = faceImages.map((img) => img.src);
+
+    // Update faceImagesSrc state with the srcArray
+    setFaceImagesSrc(srcArray);
+  }, [faceImages]);
 
   const handleAddPicture = () => {
     // Trigger click event on the hidden file input
@@ -70,7 +82,13 @@ const NewPost = ({images}) => {
     setSelectedIndex([]);
   };
 
-  // Convert the preview element to PDF and download the file
+  const handlePrint = () => {
+    if (faceImages && faceImages.length > 0) {
+      console.log(faceImagesSrc);
+      navigate("/printer", {state: {faceImagesSrc}}); // navigate to "/printer" route when images are loaded
+      //navigate("/printer", {state: {a}}); // navigate to "/printer" route when images are loaded
+    }
+  };
 
   const faceImageSize = Math.min(window.innerWidth / 5, window.innerHeight / 5);
 
@@ -111,8 +129,8 @@ const NewPost = ({images}) => {
           />
         </button>
         <button
-          onClick={() => navigate("/printer")}
-          onTouchEnd={() => navigate("/printer")}
+          onClick={() => handlePrint()}
+          onTouchEnd={() => handlePrint()}
           className={styles.bottomButton}
         >
           <img
@@ -139,5 +157,5 @@ const NewPost = ({images}) => {
 export default NewPost;
 
 NewPost.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  images: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

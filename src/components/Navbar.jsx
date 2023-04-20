@@ -10,25 +10,23 @@ const Navbar2 = () => {
   return (
     <Navbar style={{backgroundColor: "#0056b3"}} variant="dark">
       <Container>
-        <Navbar.Brand href="#home">
-          <a className="nav-link" href="/">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                alt=""
-                src="/Icons/smile.svg"
-                width="30"
-                height="30"
-                style={{marginRight: "10px"}}
-              />{" "}
-              Face Detector
-            </div>
-          </a>
+        <Navbar.Brand href="/">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img
+              alt=""
+              src="/Icons/smile.svg"
+              width="30"
+              height="30"
+              style={{marginRight: "10px"}}
+            />{" "}
+            Face Detector
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

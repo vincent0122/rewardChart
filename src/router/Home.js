@@ -74,11 +74,11 @@ const Home = () => {
         }}
       >
         <h3>Welcome to FaceDetector App</h3>
-        <p style={{marginBottom: "5vh", textAlign: "center", maxWidth: "80%"}}>
-          Upload an image to detect faces and create icons.
+        <p style={{marginBottom: "8vh", textAlign: "center", maxWidth: "80%"}}>
+          Upload an image to detect faces and create icons
         </p>
         <p style={{marginBottom: "10vh", textAlign: "center", maxWidth: "80%"}}>
-          Click the upload icon to start.
+          Click the upload icon to start
         </p>
         <label htmlFor="file">
           <img
@@ -89,7 +89,14 @@ const Home = () => {
           />
         </label>
         <input
-          onChange={(e) => setFiles(e.target.files)}
+          onChange={(e) => {
+            const files = e.target.files;
+            if (files.length > 16) {
+              alert("Up to a maximum of 16 images are allowed");
+            } else {
+              setFiles(files);
+            }
+          }}
           id="file"
           style={{display: "none"}}
           type="file"

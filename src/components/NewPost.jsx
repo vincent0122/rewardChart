@@ -84,9 +84,7 @@ const NewPost = ({images}) => {
 
   const handlePrint = () => {
     if (faceImages && faceImages.length > 0) {
-      console.log(faceImagesSrc);
       navigate("/printer", {state: {faceImagesSrc}}); // navigate to "/printer" route when images are loaded
-      //navigate("/printer", {state: {a}}); // navigate to "/printer" route when images are loaded
     }
   };
 

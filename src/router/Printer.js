@@ -7,6 +7,7 @@ const Printer = () => {
   const [shape, setShape] = useState("circle");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff"); // Initial white background color
   const canvasRef = useRef(null);
+  const [generatedImageURL, setGeneratedImageURL] = useState("");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,8 +22,15 @@ const Printer = () => {
     setBackgroundColor(e.target.value);
   };
 
+  const generateImageURL = () => {
+    const canvas = canvasRef.current;
+    const dataURL = canvas.toDataURL("image/png");
+    setGeneratedImageURL(dataURL);
+  };
+
   const createCanvas = (canvas, shape) => {
     const ctx = canvas.getContext("2d");
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -45,6 +53,33 @@ const Printer = () => {
       img.src = src;
 
       img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        const targetWidth = cellHeight * aspectRatio;
+        const targetHeight = cellWidth / aspectRatio;
+        const x = col * (cellWidth + margin) + (cellWidth - targetWidth) / 2;
+        const y = row * (cellHeight + margin) + (cellHeight - targetHeight) / 2;
+
+        //그림자 그리기
+        ctx.beginPath();
+        createClipPath(
+          ctx,
+          shape,
+          col * (cellWidth + margin),
+          row * (cellHeight + margin),
+          cellWidth,
+          cellHeight
+        );
+
+        //ctx.clip();
+        ctx.shadowColor = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.fillStyle = "black";
+        ctx.fill();
+
+        //그림자 그기
+
         ctx.save();
         ctx.beginPath();
         createClipPath(
@@ -55,30 +90,22 @@ const Printer = () => {
           cellWidth,
           cellHeight
         );
+
         ctx.clip();
-        const aspectRatio = img.width / img.height;
-        const targetWidth = cellHeight * aspectRatio;
-        const targetHeight = cellWidth / aspectRatio;
-        const x = col * (cellWidth + margin) + (cellWidth - targetWidth) / 2;
-        const y = row * (cellHeight + margin) + (cellHeight - targetHeight) / 2;
 
         ctx.globalCompositeOperation = "source-over";
 
+        ctx.save();
+        ctx.restore();
+
         ctx.drawImage(img, x, y, targetWidth, targetHeight);
         ctx.lineWidth = 1; // Set the width of the boundary line
-        ctx.strokeStyle = backgroundColor; // Set the color of the boundary line to the selected background color
+        // ctx.strokeStyle = backgroundColor; // Set the color of the boundary line to the selected background color
+        // ctx.stroke();
 
-        ctx.beginPath();
-        createClipPath(
-          ctx,
-          shape,
-          col * (cellWidth + margin),
-          row * (cellHeight + margin),
-          cellWidth,
-          cellHeight
-        );
-        ctx.stroke();
         ctx.restore();
+
+        generateImageURL();
       };
     });
   };
@@ -91,7 +118,6 @@ const Printer = () => {
     switch (shape) {
       case "circle":
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        ctx.s = "pink";
         break;
       case "heart":
         const yOffset = radius * 0.7;
@@ -137,23 +163,28 @@ const Printer = () => {
         ctx.lineTo(centerX, centerY - outerRadius);
         ctx.closePath();
         break;
-      case "ninePointStar":
-        const nSpikes = 9;
-        const nOuterRadius = radius;
-        const nInnerRadius = radius / 2.5;
-        const nAngle = Math.PI / nSpikes;
-
-        ctx.moveTo(centerX, centerY - nOuterRadius);
-        for (let i = 0; i < nSpikes; i++) {
-          ctx.lineTo(
-            centerX + Math.cos(nAngle * i) * nInnerRadius,
-            centerY - Math.sin(nAngle * i) * nInnerRadius
-          );
-          ctx.lineTo(
-            centerX + Math.cos(nAngle * i + nAngle / 2) * nOuterRadius,
-            centerY - Math.sin(nAngle * i + nAngle / 2) * nOuterRadius
-          );
-        }
+      case "triangle":
+        ctx.moveTo(centerX, centerY - radius);
+        ctx.lineTo(centerX + radius, centerY + radius);
+        ctx.lineTo(centerX - radius, centerY + radius);
+        ctx.closePath();
+        break;
+      case "square":
+        const cornerRadius = radius * 0.15; // Adjust this value to change the roundness of the corners
+        ctx.moveTo(x + cornerRadius, y);
+        ctx.lineTo(x + width - cornerRadius - 2, y - 2);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + cornerRadius);
+        ctx.lineTo(x + width, y + height - cornerRadius);
+        ctx.quadraticCurveTo(
+          x + width,
+          y + height,
+          x + width - cornerRadius,
+          y + height
+        );
+        ctx.lineTo(x + cornerRadius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - cornerRadius);
+        ctx.lineTo(x, y + cornerRadius);
+        ctx.quadraticCurveTo(x, y, x + cornerRadius, y);
         ctx.closePath();
         break;
       default:
@@ -164,10 +195,12 @@ const Printer = () => {
   return (
     <div>
       <select value={shape} onChange={handleShapeChange}>
+        <option value="square">square</option>
         <option value="circle">Circle</option>
         <option value="heart">Heart</option>
         <option value="star">Star</option>
         <option value="ninePointStar">9-pointed Star</option>
+        <option value="triangle">triangle</option>
       </select>
       <input
         type="color"
@@ -180,8 +213,13 @@ const Printer = () => {
         id="imageCanvas"
         width="1600"
         height="1600"
-        style={{width: "800px", height: "800px"}}
+        style={{width: "800px", height: "800px", display: "none"}}
       ></canvas>
+      <img
+        src={generatedImageURL}
+        alt="Generated Image"
+        style={{width: "800px", height: "800px"}}
+      />
     </div>
   );
 };

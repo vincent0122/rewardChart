@@ -20,18 +20,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 90px;
+  padding-bottom: 0px;
 }
 
 .faceImagesWrapper {
   overflow-y: auto;
-  width: 90%;
-  padding-bottom: 10px;
+  width: 100%;
+  padding-bottom: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1.5%;
+  gap: 0%;
 }
 
 .bottomBar {

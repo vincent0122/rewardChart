@@ -18,9 +18,9 @@ const FaceImage = ({
       style={{
         width: faceImageSize,
         height: faceImageSize,
-        borderRadius: "50%",
+        borderRadius: "0%",
         overflow: "hidden",
-        margin: "1.5px 1px",
+        margin: "1px 1px",
         position: "relative",
       }}
       onClick={handleClick}
@@ -52,8 +52,8 @@ const FaceImage = ({
             alt="Selected"
             style={{
               position: "absolute",
-              right: "6%",
-              bottom: "6%",
+              right: "1%",
+              bottom: "1%",
               width: "50%",
               height: "50%",
               borderRadius: "50%",

@@ -60,16 +60,6 @@ const handleImages = async (images) => {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.beginPath();
-        ctx.arc(diameter, diameter, diameter, 0, 2 * Math.PI);
-        ctx.strokeStyle = "transparent";
-        ctx.lineWidth = 3;
-        //ctx.setLineDash([2, 2]); // set line dash
-        ctx.stroke();
-        ctx.clip();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(
           img,
           cropBox.x,

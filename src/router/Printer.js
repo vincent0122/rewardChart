@@ -117,7 +117,7 @@ const Printer = () => {
 
     switch (shape) {
       case "circle":
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.arc(centerX, centerY, radius - 5, 0, 2 * Math.PI);
         break;
       case "heart":
         const yOffset = radius * 0.7;
@@ -213,7 +213,7 @@ const Printer = () => {
         id="imageCanvas"
         width="1600"
         height="1600"
-        style={{width: "800px", height: "800px", display: "none"}}
+        style={{width: "10px", height: "10px", display: "none"}}
       ></canvas>
       <img
         src={generatedImageURL}

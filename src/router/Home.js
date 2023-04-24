@@ -77,9 +77,13 @@ const Home = () => {
         <p style={{marginBottom: "8vh", textAlign: "center", maxWidth: "80%"}}>
           Upload an image to detect faces and create icons
         </p>
-        <p style={{marginBottom: "10vh", textAlign: "center", maxWidth: "80%"}}>
+        <p style={{marginBottom: "2vh", textAlign: "center", maxWidth: "80%"}}>
           Click the upload icon to start
         </p>
+        <p style={{marginBottom: "10vh", textAlign: "center", maxWidth: "80%"}}>
+          Up to 20 images can be loaded
+        </p>
+
         <label htmlFor="file">
           <img
             className="addImg"

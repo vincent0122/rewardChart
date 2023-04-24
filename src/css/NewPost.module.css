@@ -1,7 +1,4 @@
 .topBar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   height: 100%;
   margin-top: 5px;
 }
@@ -15,21 +12,19 @@
 }
 
 .preview {
-  width: 100vw;
-  border: 0px solid black;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center; /* align items horizontally */
+  align-items: center; /* align items vertically */
+  border: 0px solid black;
   padding-bottom: 0px;
 }
 
 .faceImagesWrapper {
+  width: 90vw;
   overflow-y: auto;
-  width: 100%;
   padding-bottom: 0px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: left;
   flex-wrap: wrap;
   gap: 0%;
 }

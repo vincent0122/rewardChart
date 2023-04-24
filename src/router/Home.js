@@ -91,8 +91,8 @@ const Home = () => {
         <input
           onChange={(e) => {
             const files = e.target.files;
-            if (files.length > 16) {
-              alert("Up to a maximum of 16 images are allowed");
+            if (files.length > 20) {
+              alert("Up to a maximum of 20 images are allowed");
             } else {
               setFiles(files);
             }

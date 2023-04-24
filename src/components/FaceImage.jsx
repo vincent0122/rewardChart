@@ -18,7 +18,7 @@ const FaceImage = ({
       style={{
         width: faceImageSize,
         height: faceImageSize,
-        borderRadius: "0%",
+        borderRadius: "5%",
         overflow: "hidden",
         margin: "1px 1px",
         position: "relative",

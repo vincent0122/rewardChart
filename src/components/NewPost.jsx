@@ -1,6 +1,3 @@
-//preview는 보여주기니까 서버에 별도 저장이 필요하다.
-//별도 저장할 수 있는 이미지를 새창에서 띄우는게 안된다
-
 import {useEffect, useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import React from "react";
@@ -91,7 +88,7 @@ const NewPost = ({images}) => {
   const faceImageSize = Math.min(window.innerWidth / 5, window.innerHeight / 5);
 
   return (
-    <div className={styles.topBar}>
+    <div>
       <div id="preview" className={styles.preview}>
         <div className={styles.faceImagesWrapper}>
           {faceImages.map((faceImage, index) => (

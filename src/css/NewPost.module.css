@@ -24,7 +24,7 @@
   overflow-y: auto;
   padding-bottom: 0px;
   display: flex;
-  justify-content: left;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0%;
 }

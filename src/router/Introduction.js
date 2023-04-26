@@ -1,5 +1,7 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import {Container, Row, Col} from "react-bootstrap";
+import styles from "../css/Introduction.css";
 
 const Introduction = () => {
   return (
@@ -7,25 +9,34 @@ const Introduction = () => {
       <Row>
         <Col>
           <h1>Welcome to Face Icon App</h1>
-          <p>
-            Face Icon App is a React-based application that detects faces in
-            your images and creates small face icons.
+          <p style={{marginBottom: "20px"}}>
+            Face Icon App <strong>DETECTS</strong> faces in your images and
+            creates new images
           </p>
           <h2>App Features</h2>
           <ul>
+            <li>This App makes square image. You can upload to instagram.</li>
+            <img
+              src="/gallary/2.jpg"
+              alt="img2"
+              className="img-fluid"
+              style={{marginBottom: "20px"}}
+            />
+
             <li>
-              Developed using ReactJS for a fast and responsive user experience
+              This app can detect face not only from photo but also from
+              drawings.
             </li>
-            <li>Automatically detects faces and creates small face icons</li>
-            <li>
-              Download face icons by long-pressing on the icon (using your
-              mobile device&apos;s native functionality)
-            </li>
+            <img
+              src="/gallary/3.png"
+              alt="img3"
+              className="img-fluid"
+              style={{marginBottom: "20px"}}
+            />
             <li>
               Images uploaded are not stored anywhere, ensuring privacy and
               security
             </li>
-            <li>Explore many interesting face icon creations</li>
             <li>
               To ensure usable results, face icons are only generated if the
               detected face size is greater than 200px.

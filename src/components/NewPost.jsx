@@ -89,6 +89,17 @@ const NewPost = ({images}) => {
 
   return (
     <div>
+      <div
+        style={{
+          marginTop: "10px",
+          marginBottom: "10px",
+          fontWeight: "bold",
+          textAlign: "center",
+        }}
+      >
+        If you want to save individual photos, please use long press.
+      </div>
+
       <div id="preview" className={styles.preview}>
         <div className={styles.faceImagesWrapper}>
           {faceImages.map((faceImage, index) => (

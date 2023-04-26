@@ -232,6 +232,16 @@ const Printer = () => {
 
   return (
     <div>
+      <div
+        style={{
+          marginTop: "10px",
+          marginBottom: "10px",
+          fontWeight: "bold",
+          textAlign: "center",
+        }}
+      >
+        To save photo in your mobile device, please use long press.
+      </div>
       <div>
         <label htmlFor="shapeOptions">Shape</label>
         {shapeOptions.map((option, index) => (

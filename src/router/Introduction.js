@@ -28,7 +28,7 @@ const Introduction = () => {
               drawings.
             </li>
             <img
-              src="/gallary/3.png"
+              src="/gallary/3.PNG"
               alt="img3"
               className="img-fluid"
               style={{marginBottom: "20px"}}
